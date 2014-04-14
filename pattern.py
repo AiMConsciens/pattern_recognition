@@ -127,17 +127,16 @@ def moment_of_area(image):
     return (x_c, y_c)
 
 def pad(image, height, width):
-    lhs_pad = (16 - width)/2
-    rhs_pad = 16 - (width + lhs_pad)
-    top_pad = (16 - height)/2
-    bot_pad = 16 - (height + top_pad)
-
-    image = np.insert(image, [height]*bot_pad, 0, axis=0)
-    image = np.insert(image, [0]*top_pad, 0, axis=0)
-    image = np.insert(image, [width]*rhs_pad, 0, axis=1)
-    image = np.insert(image, [0]*lhs_pad, 0, axis=1)
-
-    return image
+    im = np.zeros((16, 16))
+    h1_offset = 0 if height >= 16 else (16 - height) / 2
+    w1_offset = 0 if width >= 16 else (16 - width) / 2
+    h2_offset = 0 if height < 16 else height - 16
+    w2_offset = 0 if width < 16 else width - 16
+    for i in range(height - h2_offset):
+        for j in range(width - w2_offset):
+            im[i + h1_offset, j + w1_offset] = \
+                    image[i + (h2_offset / 2), j + (w2_offset / 2)]
+    return im
 
 def unpack(argv):
     samples = {}
@@ -175,12 +174,13 @@ def unpack(argv):
 
 def out(features, method):
     confusion = np.zeros((11, 11))
+    idx = dict((key, i) for i, key in enumerate(features))
     for key in features:
         for sample in features[key]:
-            decision = int(method(sample))
-            confusion[int(key)][decision] += 1
-            if decision != int(key):
-                confusion[int(key)][10] += 1
+            decision = idx[method(sample)]
+            confusion[idx[key]][decision] += 1
+            if decision != idx[key]:
+                confusion[idx[key]][10] += 1
                 confusion[10][decision] += 1
     confusion[10][10] = np.sum( confusion[-1] )
 
