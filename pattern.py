@@ -127,15 +127,6 @@ def moment_of_area(image):
     return (x_c, y_c)
 
 def pad(image, height, width):
-
-    # if height >= 16 or width >= 16:
-    #     print(height, width)
-
-    if height >= 16:
-        t_crop = (height - 16)/2
-        b_crop = height - t_crop 
-        np.delete(image, np.concatenate((np.arange(t_crop), np.arange(height - b_crop, height))).tolist(), axis=0)
-
     lhs_pad = (16 - width)/2
     rhs_pad = 16 - (width + lhs_pad)
     top_pad = (16 - height)/2
@@ -208,3 +199,29 @@ if __name__ == '__main__':
         features[d] = {'moment': extract_moment_features(data[d]), 
                 'pixel': extract_pxl_features(data[d])}
 
+    method = []
+    method.append(kNN(1, 2, features['A']['moment']))
+    method.append(kNN(1, 4, features['A']['moment']))
+    method.append(kNN(5, 2, features['A']['moment']))
+    method.append(kNN(1, 2, features['A']['pixel']))
+    method.append(kNN(5, 2, features['A']['pixel']))
+
+    pprint.pprint('Output for method 1: ')
+    out(features['A']['moment'], method[0])
+    out(features['B']['moment'], method[0])
+
+    pprint.pprint('Output for method 2: ')
+    out(features['A']['moment'], method[1])
+    out(features['B']['moment'], method[1])
+
+    pprint.pprint('Output for method 3: ')
+    out(features['A']['moment'], method[2])
+    out(features['B']['moment'], method[2])
+
+    pprint.pprint('Output for method 4: ')
+    out(features['A']['pixel'], method[3])
+    out(features['B']['pixel'], method[3])
+
+    pprint.pprint('Output for method 5: ')
+    out(features['A']['pixel'], method[4])
+    out(features['B']['pixel'], method[4])
