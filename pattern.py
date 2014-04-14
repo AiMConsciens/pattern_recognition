@@ -173,8 +173,8 @@ def unpack(argv):
 
 
 def out(features, method):
-    confusion = np.zeros((11, 11))
     idx = dict((key, i) for i, key in enumerate(features))
+    confusion = np.zeros((11, 11))
     for key in features:
         for sample in features[key]:
             decision = idx[method(sample)]
@@ -182,7 +182,7 @@ def out(features, method):
             if decision != idx[key]:
                 confusion[idx[key]][10] += 1
                 confusion[10][decision] += 1
-    confusion[10][10] = np.sum( confusion[-1] )
+    confusion[10][10] = np.sum(confusion[-1])
 
     pprint.pprint(confusion.tolist())
     return 0
