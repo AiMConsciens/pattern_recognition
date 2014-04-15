@@ -10,6 +10,7 @@ import pprint
 import itertools as it
 import numpy as np
 from scipy.spatial.distance import minkowski
+import pywt
 
 def kNN(k, p, train):
     def g(test_sample):
@@ -73,13 +74,31 @@ def extract_cov_mat(data):
     cov_mat = []
     for key in data:
         cov_mat.append( np.cov(np.transpose(np.array(data[key]))) )
-    return np.linalg.inv(np.mean(np.array(cov_mat), axis=0))
+    return np.linalg.pinv(np.mean(np.array(cov_mat), axis=0))
 
 def extract_freq(data):
     freq = {}
     for key in data:
         freq[key] = np.sum(np.array(data[key]), 0) / float(len(data[key]))
     return freq
+
+def extract_wavelet_features(data):
+    features = {}
+    for key in data:
+        features[key] = []
+        for image in data[key]:
+            coeffs = pywt.wavedec2(image, 'db1', level=4)
+            features[key].append(vectorize_wavelet_coeffs(coeffs))
+    return features
+
+def vectorize_wavelet_coeffs(coeffs):
+    v = []
+    v.append(np.ndarray.flatten(coeffs[0]))
+    for (c1, c2, c3) in coeffs[1:]:
+        v.append(np.ndarray.flatten(c1))
+        v.append(np.ndarray.flatten(c2))
+        v.append(np.ndarray.flatten(c3))
+    return np.concatenate(v).tolist()
 
 def extract_pxl_features(data):
     features = {}
@@ -197,31 +216,44 @@ if __name__ == '__main__':
     features = {}
     for d in data:
         features[d] = {'moment': extract_moment_features(data[d]), 
-                'pixel': extract_pxl_features(data[d])}
+                'pixel': extract_pxl_features(data[d]),
+                'wavelet': extract_wavelet_features(data[d])}
 
     method = []
+    method.append(minimum_distance_classifier(features['A']['moment']))
+    method.append(identical_cov_classifier(features['A']['moment']))
     method.append(kNN(1, 2, features['A']['moment']))
-    method.append(kNN(1, 4, features['A']['moment']))
     method.append(kNN(5, 2, features['A']['moment']))
-    method.append(kNN(1, 2, features['A']['pixel']))
-    method.append(kNN(5, 2, features['A']['pixel']))
+
+    method.append(identical_cov_classifier(features['A']['wavelet']))
 
     pprint.pprint('Output for method 1: ')
     out(features['A']['moment'], method[0])
     out(features['B']['moment'], method[0])
+    out(features['C']['moment'], method[0])
+    out(features['D']['moment'], method[0])
 
     pprint.pprint('Output for method 2: ')
     out(features['A']['moment'], method[1])
     out(features['B']['moment'], method[1])
+    out(features['C']['moment'], method[1])
+    out(features['D']['moment'], method[1])
 
     pprint.pprint('Output for method 3: ')
     out(features['A']['moment'], method[2])
     out(features['B']['moment'], method[2])
+    out(features['C']['moment'], method[2])
+    out(features['D']['moment'], method[2])
 
     pprint.pprint('Output for method 4: ')
-    out(features['A']['pixel'], method[3])
-    out(features['B']['pixel'], method[3])
+    out(features['A']['moment'], method[3])
+    out(features['B']['moment'], method[3])
+    out(features['C']['moment'], method[3])
+    out(features['D']['moment'], method[3])
 
     pprint.pprint('Output for method 5: ')
-    out(features['A']['pixel'], method[4])
-    out(features['B']['pixel'], method[4])
+    out(features['A']['wavelet'], method[4])
+    out(features['B']['wavelet'], method[4])
+    out(features['C']['wavelet'], method[4])
+    out(features['D']['wavelet'], method[4])
+
