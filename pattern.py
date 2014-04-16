@@ -191,16 +191,17 @@ def unpack(argv):
     return samples
 
 
-def out(features, method):
-    idx = dict((key, i) for i, key in enumerate(features))
+def out(method, *test):
+    idx = dict((key, i) for i, key in enumerate(test[0]))
     confusion = np.zeros((11, 11))
-    for key in features:
-        for sample in features[key]:
-            decision = idx[method(sample)]
-            confusion[idx[key]][decision] += 1
-            if decision != idx[key]:
-                confusion[idx[key]][10] += 1
-                confusion[10][decision] += 1
+    for features in test:
+        for key in features:
+            for sample in features[key]:
+                decision = idx[method(sample)]
+                confusion[idx[key]][decision] += 1
+                if decision != idx[key]:
+                    confusion[idx[key]][10] += 1
+                    confusion[10][decision] += 1
     confusion[10][10] = np.sum(confusion[-1])
 
     pprint.pprint(confusion.tolist())
@@ -228,32 +229,17 @@ if __name__ == '__main__':
     method.append(identical_cov_classifier(features['A']['wavelet']))
 
     pprint.pprint('Output for method 1: ')
-    out(features['A']['moment'], method[0])
-    out(features['B']['moment'], method[0])
-    out(features['C']['moment'], method[0])
-    out(features['D']['moment'], method[0])
+    out(method[0], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 2: ')
-    out(features['A']['moment'], method[1])
-    out(features['B']['moment'], method[1])
-    out(features['C']['moment'], method[1])
-    out(features['D']['moment'], method[1])
+    out(method[1], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 3: ')
-    out(features['A']['moment'], method[2])
-    out(features['B']['moment'], method[2])
-    out(features['C']['moment'], method[2])
-    out(features['D']['moment'], method[2])
+    out(method[2], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 4: ')
-    out(features['A']['moment'], method[3])
-    out(features['B']['moment'], method[3])
-    out(features['C']['moment'], method[3])
-    out(features['D']['moment'], method[3])
+    out(method[3], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 5: ')
-    out(features['A']['wavelet'], method[4])
-    out(features['B']['wavelet'], method[4])
-    out(features['C']['wavelet'], method[4])
-    out(features['D']['wavelet'], method[4])
+    out(method[4], features['B']['wavelet'], features['C']['wavelet'], features['D']['wavelet'])
 
