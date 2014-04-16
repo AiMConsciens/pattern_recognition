@@ -12,6 +12,29 @@ import numpy as np
 from scipy.spatial.distance import minkowski
 import pywt
 
+from pybrain.datasets.classification import ClassificationDataSet
+from pybrain.tools.shortcuts import buildNetwork
+from pybrain.supervised.trainers import BackpropTrainer
+
+def neural_net(train):
+    idx = dict((key, i) for i, key in enumerate(train))
+    c_names = dict((i, key) for i, key in enumerate(train))
+
+    dim = len(train[train.keys()[0]][0])
+    trndata = ClassificationDataSet(dim, nb_classes=10, class_labels=[key for key in train])
+    for key in train:
+        for train_sample in train[key]:
+            trndata.addSample(train_sample, idx[key])
+    trndata._convertToOneOfMany()
+    nn = buildNetwork(trndata.indim, trndata.indim + 1, trndata.outdim) 
+    trainer = BackpropTrainer(nn, dataset=trndata, momentum=0.1, verbose=True, weightdecay=0.01) 
+    trainer.trainEpochs(10)
+
+    def g(test_sample):
+        z = nn.activate(test_sample).tolist()
+        return c_names[z.index(max(z))]
+    return g
+
 def kNN(k, p, train):
     def g(test_sample):
         nn = zip(['']*k, (np.Inf*np.ones(k)).tolist())
@@ -228,18 +251,22 @@ if __name__ == '__main__':
 
     method.append(identical_cov_classifier(features['A']['wavelet']))
 
-    pprint.pprint('Output for method 1: ')
-    out(method[0], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    method.append(neural_net(features['A']['moment']))
+
+    # pprint.pprint('Output for method 1: ')
+    # out(method[0], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 2: ')
     out(method[1], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
-    pprint.pprint('Output for method 3: ')
-    out(method[2], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    # pprint.pprint('Output for method 3: ')
+    # out(method[2], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
-    pprint.pprint('Output for method 4: ')
-    out(method[3], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    # pprint.pprint('Output for method 4: ')
+    # out(method[3], features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
-    pprint.pprint('Output for method 5: ')
-    out(method[4], features['B']['wavelet'], features['C']['wavelet'], features['D']['wavelet'])
+    # pprint.pprint('Output for method 5: ')
+    # out(method[4], features['B']['wavelet'], features['C']['wavelet'], features['D']['wavelet'])
 
+    pprint.pprint('Output for method 6: ')
+    out(method[5], features['B']['moment'], features['C']['moment'], features['D']['moment'])
