@@ -27,8 +27,8 @@ def neural_net(train):
             trndata.addSample(train_sample, idx[key])
     trndata._convertToOneOfMany()
     nn = buildNetwork(trndata.indim, trndata.indim + 1, trndata.outdim) 
-    trainer = BackpropTrainer(nn, dataset=trndata, momentum=0.1, verbose=True, weightdecay=0.01) 
-    trainer.trainEpochs(10)
+    trainer = BackpropTrainer(nn, dataset=trndata, momentum=0.1, verbose=True) 
+    trainer.trainEpochs(1000)
 
     def g(test_sample):
         z = nn.activate(test_sample).tolist()
