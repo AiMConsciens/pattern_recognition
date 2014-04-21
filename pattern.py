@@ -4,6 +4,8 @@
 # Final
 # Usage: ./pattern.py [path_to_data]/*
 
+import pickle
+
 import sys
 import os
 import pprint
@@ -16,6 +18,16 @@ from pybrain.datasets.classification import ClassificationDataSet
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 
+# best set gathered with 25 hidden machines, lr=.15, momentum = .12
+def neural_net_from_file():
+    f = open('net', 'r')
+    nn = pickle.load(f)
+
+    def g(test_sample):
+        z = nn.activate(test_sample).tolist()
+        return c_names[z.index(max(z))]
+    return g
+
 def neural_net(train):
     idx = dict((key, i) for i, key in enumerate(train))
     c_names = dict((i, key) for i, key in enumerate(train))
@@ -26,9 +38,13 @@ def neural_net(train):
         for train_sample in train[key]:
             trndata.addSample(train_sample, idx[key])
     trndata._convertToOneOfMany()
-    nn = buildNetwork(trndata.indim, trndata.indim + 1, trndata.outdim) 
-    trainer = BackpropTrainer(nn, dataset=trndata, momentum=0.1, verbose=True) 
-    trainer.trainEpochs(1000)
+    nn = buildNetwork(trndata.indim, 15, trndata.outdim) 
+    trainer = BackpropTrainer(nn, dataset=trndata, learningrate=.15, momentum=0.12, verbose=True) 
+    trainer.trainUntilConvergence(maxEpochs=1000000)
+
+    f = open('net', 'w')
+    pickle.dump(nn, f)
+    f.close()
 
     def g(test_sample):
         z = nn.activate(test_sample).tolist()
