@@ -327,4 +327,4 @@ if __name__ == '__main__':
     confusion_mats['6'] = out(method[5],\
             features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
-    latexize(confusion_mats, [key for key in data['A']])
+    latexize(confusion_mats, sorted([key for key in data['A']]))
