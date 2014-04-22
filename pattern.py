@@ -256,21 +256,22 @@ def out(method, *test):
 
 def latexize(mats, classes):
     classes.append('Error Type I')
+    classes2 = list(classes)
+    classes2[-1] = classes2[-1] + 'I'
     f = open('latex_tables', 'w')
     for key in mats:
         f.write('\\begin{table*}\n')
         f.write('\\centering\n')
-        f.write('\\caption{Confusion Matrix Using Method ' + key + '} \\hline\n')
+        f.write('\\caption{Confusion Matrix Using Method ' + key + '}\n')
         f.write('\\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \\hline\n')
-        f.write('& ' + " & ".join(classes) + ' \\hline\n')
-        classes[-1] = classes[-1] + 'I'
+        f.write('& ' + " & ".join(classes) + '\\\\ \\hline\n')
         for i, row in enumerate(mats[key]):
-            f.write(classes[i] + ' & ')
-            for el in row[:-2]:
-                f.write(str(el))
+            f.write(classes2[i] + ' & ')
+            for el in row[:-1]:
+                f.write(str(int(el)))
                 f.write(' & ')
-            f.write(str(row[-1]))
-            f.write(' \\hline\n')
+            f.write(str(int(row[-1])))
+            f.write('\\\\ \\hline\n')
         f.write('\\end{tabular}\n')
         f.write('\\end{table*}\n')
         f.write('\n')
