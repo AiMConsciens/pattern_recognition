@@ -254,16 +254,25 @@ def out(method, *test):
     pprint.pprint(confusion.tolist())
     return confusion
 
-def latexize(mats):
-    f = open('results', 'w')
+def latexize(mats, classes):
+    classes.append('Error Type I')
+    f = open('latex_tables', 'w')
     for key in mats:
-        f.write('Confusion Matrix for Method ' + key + '\n')
-        for row in mats[key]:
-            for j in row[:-2]:
-                f.write(str(j))
+        f.write('\\begin{table*}\n')
+        f.write('\\centering\n')
+        f.write('\\caption{Confusion Matrix Using Method ' + key + '} \\hline\n')
+        f.write('\\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \\hline\n')
+        f.write('& ' + " & ".join(classes) + ' \\hline\n')
+        classes[-1] = classes[-1] + 'I'
+        for i, row in enumerate(mats[key]):
+            f.write(classes[i] + ' & ')
+            for el in row[:-2]:
+                f.write(str(el))
                 f.write(' & ')
             f.write(str(row[-1]))
-            f.write('\n')
+            f.write(' \\hline\n')
+        f.write('\\end{tabular}\n')
+        f.write('\\end{table*}\n')
         f.write('\n')
     f.close()
     return 0
@@ -317,4 +326,4 @@ if __name__ == '__main__':
     confusion_mats['6'] = out(method[5],\
             features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
-    latexize(confusion_mats)
+    latexize(confusion_mats, [key for key in data['A']])
