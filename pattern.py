@@ -12,6 +12,7 @@ import pprint
 import itertools as it
 import numpy as np
 from scipy.spatial.distance import minkowski
+from scipy import spatial
 import pywt
 
 from pybrain.datasets.classification import ClassificationDataSet
@@ -54,16 +55,21 @@ def neural_net(train):
     return g
 
 def kNN(k, p, train):
+    labels = {}
+    data = []
+    for key in train:
+        for sample in train[key]:
+            data.append(tuple(sample))
+            labels[tuple(sample)] = key
+    tree = spatial.KDTree(data)
     def g(test_sample):
-        nn = zip(['']*k, (np.Inf*np.ones(k)).tolist())
-        for key in train: 
-            for train_sample in train[key]:
-                dist = minkowski(test_sample, train_sample, p)
-                if  dist < nn[-1][1]:
-                    nn[-1] = (key, dist)
-                    nn.sort(key=lambda x: x[1])
-        nn = [x[0] for x in nn]
-        return max(nn, key=nn.count)
+        nn_idx = tree.query(test_sample, k=k, p=p)[1]
+        pts = tree.data[nn_idx]
+        if k == 1:
+            return labels[tuple(pts)]
+        else:
+            nn = [labels[tuple(point)] for point in pts]
+            return max(nn, key=nn.count)
     return g
 
 def minimum_distance_classifier(train):
