@@ -1,0 +1,139 @@
+\documentclass[12pt]{article}
+\usepackage[margin=2cm]{geometry}
+\begin{document}
+\title{Character Classification Project : Pattern Recognition Final}
+\author{Armon Shariati}
+\date{April 22, 2014}
+\maketitle
+
+\begin{table*}
+    \centering
+    \caption{Error Rates for Each Method on Every Data Set}
+    \begin{tabular}{| c | c | c | c | c |} \hline
+        & A & B & C & D\\ \hline
+      1 & 241 & 240 & 212 & 235\\ \hline
+      2 & 104 & 110 & 101 & 107\\ \hline
+      3 & 0 & 146 & 146 & 153\\ \hline
+      4 & 75 & 125 & 120 & 131\\ \hline
+      5 & 3 & 13 & 17 & 14\\ \hline
+      6 & 5 & 57 & 51 & 67\\ \hline
+    \end{tabular}
+\end{table*}
+
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 1}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 198 & 0 & 0 & 0 & 55 & 38 & 1 & 0 & 0 & 8 & 102\\ \hline
+      c & 0 & 209 & 91 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 91\\ \hline
+      e & 0 & 49 & 221 & 0 & 13 & 0 & 17 & 0 & 0 & 0 & 79\\ \hline
+      m & 10 & 0 & 1 & 255 & 7 & 18 & 1 & 0 & 0 & 8 & 45\\ \hline
+      n & 39 & 0 & 5 & 0 & 223 & 14 & 15 & 3 & 0 & 1 & 77\\ \hline
+      o & 39 & 0 & 1 & 1 & 26 & 173 & 0 & 0 & 0 & 60 & 127\\ \hline
+      r & 0 & 0 & 4 & 0 & 18 & 0 & 278 & 0 & 0 & 0 & 22\\ \hline
+      u & 2 & 1 & 9 & 0 & 14 & 0 & 2 & 249 & 8 & 15 & 51\\ \hline
+      v & 0 & 0 & 2 & 0 & 0 & 0 & 0 & 14 & 271 & 13 & 29\\ \hline
+      x & 14 & 0 & 0 & 0 & 6 & 41 & 0 & 3 & 0 & 236 & 64\\ \hline
+Error Type II & 104 & 50 & 113 & 1 & 139 & 111 & 36 & 20 & 8 & 105 & 687\\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 2}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 265 & 0 & 0 & 0 & 31 & 1 & 0 & 0 & 0 & 3 & 35\\ \hline
+      c & 0 & 255 & 44 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 45\\ \hline
+      e & 0 & 12 & 270 & 0 & 5 & 0 & 13 & 0 & 0 & 0 & 30\\ \hline
+      m & 1 & 1 & 0 & 270 & 3 & 20 & 0 & 2 & 0 & 3 & 30\\ \hline
+      n & 35 & 0 & 4 & 0 & 244 & 11 & 2 & 3 & 0 & 1 & 56\\ \hline
+      o & 5 & 0 & 0 & 1 & 32 & 244 & 0 & 0 & 0 & 18 & 56\\ \hline
+      r & 0 & 0 & 0 & 0 & 0 & 0 & 300 & 0 & 0 & 0 & 0\\ \hline
+      u & 1 & 2 & 0 & 0 & 4 & 0 & 0 & 289 & 1 & 3 & 11\\ \hline
+      v & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 283 & 17 & 17\\ \hline
+      x & 2 & 0 & 0 & 0 & 4 & 31 & 0 & 1 & 0 & 262 & 38\\ \hline
+Error Type II & 44 & 15 & 48 & 1 & 79 & 63 & 16 & 6 & 1 & 45 & 318\\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 3}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 232 & 0 & 0 & 0 & 37 & 27 & 0 & 0 & 0 & 4 & 68\\ \hline
+      c & 0 & 261 & 39 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 39\\ \hline
+      e & 0 & 41 & 248 & 0 & 3 & 0 & 8 & 0 & 0 & 0 & 52\\ \hline
+      m & 2 & 0 & 0 & 285 & 0 & 12 & 0 & 0 & 0 & 1 & 15\\ \hline
+      n & 46 & 0 & 9 & 0 & 207 & 30 & 3 & 5 & 0 & 0 & 93\\ \hline
+      o & 30 & 0 & 1 & 4 & 28 & 205 & 0 & 0 & 0 & 32 & 95\\ \hline
+      r & 0 & 1 & 1 & 0 & 1 & 0 & 297 & 0 & 0 & 0 & 3\\ \hline
+      u & 1 & 3 & 2 & 0 & 5 & 1 & 2 & 284 & 1 & 1 & 16\\ \hline
+      v & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 296 & 3 & 4\\ \hline
+      x & 9 & 0 & 0 & 1 & 12 & 37 & 0 & 1 & 0 & 240 & 60\\ \hline
+Error Type II & 88 & 45 & 52 & 5 & 86 & 107 & 13 & 7 & 1 & 41 & 445\\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 4}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 256 & 0 & 0 & 0 & 24 & 12 & 0 & 0 & 0 & 8 & 44\\ \hline
+      c & 0 & 268 & 32 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 32\\ \hline
+      e & 0 & 31 & 257 & 0 & 2 & 0 & 10 & 0 & 0 & 0 & 43\\ \hline
+      m & 1 & 0 & 0 & 283 & 1 & 15 & 0 & 0 & 0 & 0 & 17\\ \hline
+      n & 37 & 0 & 12 & 0 & 223 & 17 & 5 & 4 & 0 & 2 & 77\\ \hline
+      o & 18 & 0 & 1 & 3 & 33 & 204 & 0 & 0 & 0 & 41 & 96\\ \hline
+      r & 0 & 0 & 1 & 0 & 0 & 0 & 299 & 0 & 0 & 0 & 1\\ \hline
+      u & 2 & 2 & 3 & 0 & 3 & 0 & 3 & 283 & 3 & 1 & 17\\ \hline
+      v & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 296 & 4 & 4\\ \hline
+      x & 6 & 0 & 0 & 0 & 12 & 25 & 0 & 2 & 0 & 255 & 45\\ \hline
+Error Type II & 64 & 33 & 49 & 3 & 75 & 69 & 18 & 6 & 3 & 56 & 376\\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 5}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 297 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1 & 3\\ \hline
+      c & 0 & 299 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1\\ \hline
+      e & 0 & 14 & 284 & 0 & 0 & 0 & 2 & 0 & 0 & 0 & 16\\ \hline
+      m & 0 & 0 & 0 & 297 & 1 & 0 & 2 & 0 & 0 & 0 & 3\\ \hline
+      n & 1 & 2 & 0 & 0 & 295 & 2 & 0 & 0 & 0 & 0 & 5\\ \hline
+      o & 0 & 0 & 0 & 1 & 1 & 296 & 1 & 1 & 0 & 0 & 4\\ \hline
+      r & 0 & 0 & 0 & 0 & 0 & 0 & 300 & 0 & 0 & 0 & 0\\ \hline
+      u & 0 & 0 & 0 & 0 & 1 & 7 & 0 & 292 & 0 & 0 & 8\\ \hline
+      v & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 296 & 4 & 4\\ \hline
+      x & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 300 & 0\\ \hline
+Error Type II & 1 & 16 & 1 & 1 & 3 & 10 & 5 & 2 & 0 & 5 & 44\\ \hline
+    \end{tabular}
+\end{table*}
+
+\begin{table*}
+    \centering
+    \caption{Confusion Matrix Using Method 6}
+    \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
+        & a & c & e & m & n & o & r & u & v & x & Error Type I\\ \hline
+      a & 285 & 0 & 1 & 0 & 10 & 4 & 0 & 0 & 0 & 0 & 15\\ \hline
+      c & 0 & 276 & 23 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 24\\ \hline
+      e & 0 & 9 & 285 & 0 & 2 & 0 & 4 & 0 & 0 & 0 & 15\\ \hline
+      m & 0 & 0 & 0 & 296 & 0 & 2 & 0 & 0 & 0 & 2 & 4\\ \hline
+      n & 13 & 0 & 2 & 0 & 271 & 10 & 1 & 3 & 0 & 0 & 29\\ \hline
+      o & 2 & 0 & 1 & 3 & 18 & 269 & 0 & 0 & 0 & 7 & 31\\ \hline
+      r & 0 & 1 & 0 & 0 & 0 & 0 & 299 & 0 & 0 & 0 & 1\\ \hline
+      u & 2 & 0 & 1 & 0 & 19 & 0 & 0 & 275 & 0 & 3 & 25\\ \hline
+      v & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 299 & 0 & 1\\ \hline
+      x & 2 & 0 & 0 & 0 & 6 & 21 & 0 & 1 & 0 & 270 & 30\\ \hline
+Error Type II & 19 & 10 & 28 & 3 & 55 & 37 & 6 & 4 & 1 & 12 & 175\\ \hline
+    \end{tabular}
+\end{table*}
+
+
+\end{document}
