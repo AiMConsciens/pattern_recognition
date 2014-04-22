@@ -18,11 +18,11 @@ from pybrain.datasets.classification import ClassificationDataSet
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 
-# best set gathered with 25 hidden machines, lr=.15, momentum = .12
+# best set gathered with 30 hidden machines, lr=.15, momentum = .1
 def neural_net_from_file(train):
     c_names = dict((i, key) for i, key in enumerate(train))
 
-    f = open('net', 'r')
+    f = open('c_I_net', 'r')
     nn = pickle.load(f)
 
     def g(test_sample):
@@ -40,8 +40,8 @@ def neural_net(train):
         for train_sample in train[key]:
             trndata.addSample(train_sample, idx[key])
     trndata._convertToOneOfMany()
-    nn = buildNetwork(trndata.indim, 15, trndata.outdim) 
-    trainer = BackpropTrainer(nn, dataset=trndata, learningrate=.2, momentum=0.15, verbose=True) 
+    nn = buildNetwork(trndata.indim, 30, trndata.outdim) 
+    trainer = BackpropTrainer(nn, dataset=trndata, learningrate=.15, momentum=0.1, verbose=True) 
     trainer.trainUntilConvergence(maxEpochs=1000)
 
     f = open('net', 'w')
@@ -246,6 +246,20 @@ def out(method, *test):
     confusion[10][10] = np.sum(confusion[-1])
 
     pprint.pprint(confusion.tolist())
+    return confusion
+
+def latexize(mats):
+    f = open('results', 'w')
+    for key in mats:
+        f.write('Confusion Matrix for Method ' + key + '\n')
+        for row in mats[key]:
+            for j in row[:-2]:
+                f.write(str(j))
+                f.write(' & ')
+            f.write(str(row[-1]))
+            f.write('\n')
+        f.write('\n')
+    f.close()
     return 0
 
 if __name__ == '__main__':
@@ -266,26 +280,35 @@ if __name__ == '__main__':
     method.append(identical_cov_classifier(features['A']['moment']))
     method.append(kNN(1, 2, features['A']['moment']))
     method.append(kNN(5, 2, features['A']['moment']))
-
     method.append(identical_cov_classifier(features['A']['wavelet']))
 
-    # Trained on moment features from set A
     method.append(neural_net_from_file(features['A']['moment']))
+    # method.append(neural_net(features['A']['moment']))
+
+    confusion_mats = {}
 
     pprint.pprint('Output for method 1: ')
-    out(method[0], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    confusion_mats['1'] = out(method[0],\
+            features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 2: ')
-    out(method[1], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    confusion_mats['2'] = out(method[1],\
+            features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 3: ')
-    out(method[2], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    confusion_mats['3'] = out(method[2],\
+            features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 4: ')
-    out(method[3], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    confusion_mats['4'] = out(method[3],\
+            features['B']['moment'], features['C']['moment'], features['D']['moment'])
 
     pprint.pprint('Output for method 5: ')
-    out(method[4], features['B']['wavelet'], features['C']['wavelet'], features['D']['wavelet'])
+    confusion_mats['5'] = out(method[4],\
+            features['B']['wavelet'], features['C']['wavelet'], features['D']['wavelet'])
 
     pprint.pprint('Output for method 6: ')
-    out(method[5], features['B']['moment'], features['C']['moment'], features['D']['moment'])
+    confusion_mats['6'] = out(method[5],\
+            features['B']['moment'], features['C']['moment'], features['D']['moment'])
+
+    latexize(confusion_mats)
