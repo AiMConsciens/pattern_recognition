@@ -260,7 +260,7 @@ def latexize(mats, classes):
     classes2[-1] = classes2[-1] + 'I'
     f = open('latex_tables', 'w')
     for key in mats:
-        f.write('\\begin{table*}\n')
+        f.write('\\begin{table}[!ht]\n')
         f.write('\\centering\n')
         f.write('\\caption{Confusion Matrix Using Method ' + key + '}\n')
         f.write('\\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \\hline\n')
