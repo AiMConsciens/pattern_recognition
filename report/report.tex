@@ -6,7 +6,17 @@
 \date{April 22, 2014}
 \maketitle
 
-\begin{table*}
+\section{Introduction}
+
+Table \ref{tab:totals} outlines the total error rates for methods one through
+four on the project handout as well as methods five and six which were my own
+design. The results reflect the performance of these classification methods
+using dataset I -- lowercase letters. I chose this dataset arbitrarily even
+though my program is general enough to use any of the five data sets as
+input\footnote{However, there may be an issue where the columns in the
+outputted latex tables are labeled incorrectly}. 
+
+\begin{table}[!ht]
     \centering
     \caption{Error Rates for Each Method on Every Data Set}
     \begin{tabular}{| c | c | c | c | c |} \hline
@@ -18,10 +28,14 @@
       5 & 3 & 13 & 17 & 14\\ \hline
       6 & 5 & 57 & 51 & 67\\ \hline
     \end{tabular}
-\end{table*}
+    \label{tab:totals}
+\end{table}
 
+The following confusion matrices illustrate the performance of methods one
+through four using sample set A for training, and the aggregation of sample
+sets B, C, and D for testing.
 
-\begin{table*}
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 1}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -38,9 +52,9 @@
       x & 14 & 0 & 0 & 0 & 6 & 41 & 0 & 3 & 0 & 236 & 64\\ \hline
 Error Type II & 104 & 50 & 113 & 1 & 139 & 111 & 36 & 20 & 8 & 105 & 687\\ \hline
     \end{tabular}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 2}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -57,9 +71,9 @@ Error Type II & 104 & 50 & 113 & 1 & 139 & 111 & 36 & 20 & 8 & 105 & 687\\ \hlin
       x & 2 & 0 & 0 & 0 & 4 & 31 & 0 & 1 & 0 & 262 & 38\\ \hline
 Error Type II & 44 & 15 & 48 & 1 & 79 & 63 & 16 & 6 & 1 & 45 & 318\\ \hline
     \end{tabular}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 3}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -76,9 +90,9 @@ Error Type II & 44 & 15 & 48 & 1 & 79 & 63 & 16 & 6 & 1 & 45 & 318\\ \hline
       x & 9 & 0 & 0 & 1 & 12 & 37 & 0 & 1 & 0 & 240 & 60\\ \hline
 Error Type II & 88 & 45 & 52 & 5 & 86 & 107 & 13 & 7 & 1 & 41 & 445\\ \hline
     \end{tabular}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 4}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -95,9 +109,34 @@ Error Type II & 88 & 45 & 52 & 5 & 86 & 107 & 13 & 7 & 1 & 41 & 445\\ \hline
       x & 6 & 0 & 0 & 0 & 12 & 25 & 0 & 2 & 0 & 255 & 45\\ \hline
 Error Type II & 64 & 33 & 49 & 3 & 75 & 69 & 18 & 6 & 3 & 56 & 376\\ \hline
     \end{tabular}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\clearpage
+
+\section{Wavelet Features}
+I chose to leverage my experience with signal processing to explore the use of
+wavelets to extract a feature vector for classification \footnote{I would like
+to thank Dylan Schwesinger for mentioning the idea to me over lunch}. I had
+also recalled a point made in a previous lecture that wavelets are very
+effective as far as extracting both local and global information from an image,
+which led me to believe they are worth investigation.
+
+Ultimately, I was successful using the two-dimensional discrete wavelet
+transformation implementation found in PyWavelets\cite{website:pywt}. I chose
+to use Daubechies wavelets as the filter. Daubechies wavelets are known for
+being a minimum length filter and having a high number of vanishing moments. In
+other words, they have the potential to provide a high degree of detail as
+signals can be approximated with higher order polynomials. For the purpose of
+this project the db1 Daubechies wavelet was sufficient, which has two
+coefficients and one vanishing point. I stored the coefficients after the
+convolution, rearranged them into a single vector, and used the resulting
+vector as my feature vector.
+
+As can be seen from the confusion matrix in Table \ref{tab:wavelet}, using
+wavelet features instead of moment features reduced the best error rate by an
+order of magnitude.
+
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 5}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -114,9 +153,43 @@ Error Type II & 64 & 33 & 49 & 3 & 75 & 69 & 18 & 6 & 3 & 56 & 376\\ \hline
       x & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 300 & 0\\ \hline
 Error Type II & 1 & 16 & 1 & 1 & 3 & 10 & 5 & 2 & 0 & 5 & 44\\ \hline
     \end{tabular}
-\end{table*}
+    \label{tab:wavelet}
+\end{table}
 
-\begin{table*}
+\section{Neural Nets}
+
+While I had no reason to suspect neural nets would outperform the classifiers
+we have constructed throughout the class, I chose to explore them purely as a
+matter of research interest.     
+
+Neural nets have been proven relatively useful in practice when patterns in the
+data are not linearly separable and nonlinear decision boundaries may be more
+ideal. Unfortunately, I was unable to gather any evidence to prove or disprove
+whether or not the patterns were in fact linearly separable as I could not
+exactly get the PyBrain\cite{website:pybrain} libsvm wrappers to work properly
+in order to construct a support vector machine. However, the PyBrain neural net
+implementations seemed easier to use and was more accessible than the SVM
+implementations in libsvm. I thought even though training the neural net would
+take more time to train than an SVM, it wouldn't make much of a difference
+considering a neural net could be trained to learn any decision boundary,
+whether it be linear or non linear. 
+
+After spending a few days training numerous neural nets for hours at a time, I
+soon understood why my friends had warned me about choosing neural nets over
+SVMs. As can be seen from the confusion matrix in Table \ref{tab:nn}, the most
+successful neural net I constructed was able to reduce the best error by about
+\%45. This neural net was constructed using a single layer of hidden machines
+with thirty hidden units, a learning rate of 0.15, and a momentum of 0.1.
+Backpropogation was used to train the set of weights. I had attempted to use
+batch learning in order to test more parameters quickly, however the
+implementation in PyBrain seemed incorrect. I also began investigating using an
+evolutionary algorithm to train my set of weights instead of backpropogation
+which was available in the PyBrain library, however I felt uncomfortable using
+a black box optimization technique with so little knowledge regarding the
+procedure.
+
+
+\begin{table}[!ht]
     \centering
     \caption{Confusion Matrix Using Method 6}
     \begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c |} \hline
@@ -133,7 +206,12 @@ Error Type II & 1 & 16 & 1 & 1 & 3 & 10 & 5 & 2 & 0 & 5 & 44\\ \hline
       x & 2 & 0 & 0 & 0 & 6 & 21 & 0 & 1 & 0 & 270 & 30\\ \hline
 Error Type II & 19 & 10 & 28 & 3 & 55 & 37 & 6 & 4 & 1 & 12 & 175\\ \hline
     \end{tabular}
-\end{table*}
+    \label{tab:nn}
+\end{table}
 
+\newpage
+
+\bibliographystyle{ieeetr}
+\bibliography{bibliography}
 
 \end{document}

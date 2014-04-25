@@ -19,7 +19,6 @@ from pybrain.datasets.classification import ClassificationDataSet
 from pybrain.tools.shortcuts import buildNetwork
 from pybrain.supervised.trainers import BackpropTrainer
 
-# best set gathered with 30 hidden machines, lr=.15, momentum = .1
 def neural_net_from_file(train):
     c_names = dict((i, key) for i, key in enumerate(train))
 
