@@ -130,7 +130,11 @@ signals can be approximated with higher order polynomials. For the purpose of
 this project the db1 Daubechies wavelet was sufficient, which has two
 coefficients and one vanishing point. I stored the coefficients after the
 convolution, rearranged them into a single vector, and used the resulting
-vector as my feature vector.
+vector as my feature vector. I used four levels of decomposition because the
+images were 16x16 pixels, and that would provide the maximum number of
+coefficients to add to the feature vector. The major drawback of this method of
+extracting features is that the dimensionality of the feature space is now much
+larger compared to the feature space of moments.
 
 As can be seen from the confusion matrix in Table \ref{tab:wavelet}, using
 wavelet features instead of moment features reduced the best error rate by an
@@ -166,17 +170,18 @@ Neural nets have been proven relatively useful in practice when patterns in the
 data are not linearly separable and nonlinear decision boundaries may be more
 ideal. Unfortunately, I was unable to gather any evidence to prove or disprove
 whether or not the patterns were in fact linearly separable as I could not
-exactly get the PyBrain\cite{website:pybrain} libsvm wrappers to work properly
-in order to construct a support vector machine. However, the PyBrain neural net
+quite get the PyBrain\cite{website:pybrain} libsvm wrappers to work properly in
+order to construct a support vector machine. However, the PyBrain neural net
 implementations seemed easier to use and was more accessible than the SVM
-implementations in libsvm. I thought even though training the neural net would
-take more time to train than an SVM, it wouldn't make much of a difference
-considering a neural net could be trained to learn any decision boundary,
-whether it be linear or non linear. 
+implementations. I thought even though training the neural net would take more
+time to train than an SVM, it wouldn't make much of a difference considering a
+neural net could be trained to learn any decision boundary, whether it be
+linear or non linear. However, after spending a few days training numerous
+neural nets for hours at a time, I soon understood why my friends had warned me
+about choosing neural nets over SVMs. I found that the lack of any guarantee in
+terms of performance -- or even convergence -- from neural nets rather annoying.
 
-After spending a few days training numerous neural nets for hours at a time, I
-soon understood why my friends had warned me about choosing neural nets over
-SVMs. As can be seen from the confusion matrix in Table \ref{tab:nn}, the most
+As can be seen from the confusion matrix in Table \ref{tab:nn}, the most
 successful neural net I constructed was able to reduce the best error by about
 \%45. This neural net was constructed using a single layer of hidden machines
 with thirty hidden units, a learning rate of 0.15, and a momentum of 0.1.
